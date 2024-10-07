@@ -85,7 +85,7 @@ class MedicineController extends Controller
     {
         $request->validate([
             'name' => 'required|max:100',
-            'type' => 'required',
+            'tipe' => 'required',
             'price' => 'required|numeric'
         ]);
 

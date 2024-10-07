@@ -6,13 +6,8 @@
     <h1>Create</h1>
 </div> --}}
 
-<form action="{{ route('medicine.store.obat')}}" method="POST" class="card p-5">
+<form action="{{ route('medicine.store.obat')}}" class="card p-5">
     @csrf
-    @if(Session::get('success'))
-        <div class="alert alert-success">
-            {{ Session::get('success')}}
-        </div>
-    @endif
     @if($errors->any())
         <div class="alert alert-danger">
             <ul>
@@ -33,7 +28,7 @@
         <div class="col-sm-10">
             <select class="form-select" name="type" id="type">
                 <option selected disabled hidden>Pilih</option>
-                <option value="tablet">Tablet</option>
+                <option value="table">Tablet</option>
                 <option value="kapsul">Kapsul</option>
                 <option value="sirup">Sirup</option>
             </select>

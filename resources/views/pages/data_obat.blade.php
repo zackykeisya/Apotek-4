@@ -54,7 +54,7 @@
                             <td class="{{ $item['stock'] <= 3 ? 'bg-danger text-white' : '' }}">{{ $item['stock'] }}</td>
                             {{-- $item['column_di_migration'] --}}
                             <td class="d-flex justify-content-center">
-                                <a href="{{ route('medicine.edit', $item['id']) }}" class="btn btn-primary me-2">Edit</a>
+                                <a href="{{ route('medicine.edit') }}" class="btn btn-primary me-2">Edit</a>
                                 <button class="btn btn-danger">Hapus</button>
                             </td>
                         </tr>

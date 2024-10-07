@@ -30,7 +30,7 @@ Route::get('/landing-page', [LandingPageController::class, 'index'])->name('land
 // mengelola data obat
 Route::get('/data-obat', [MedicineController::class, 'index'])->name('data_obat');
 
-Route::prefix('/dashboard')->name('medicine.')->group(function(){
+Route::prefix('/dashboard')->name('medicines.')->group(function(){
     Route::get('/halaman-tambah-obat', [MedicineController::class, 'create'])->name('create');
     Route::post('/create-obat', [MedicineController::class, 'store'])->name('store.obat');
     Route::get('/halaman-ubah-obat/{id}', [MedicineController::class, 'edit'])->name('edit');
