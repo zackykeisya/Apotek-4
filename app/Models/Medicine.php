@@ -11,5 +11,5 @@ class Medicine extends Model
     // jika nama model & migration ga sinkron perlu ditambah :
     // public $table = 'medicines';
     // column yg boleh diisi sama pengguna/isi datanya bukan otomatis dr sistem
-    protected $fillable = ['name', 'type', 'price', 'stock'];
+    protected $fillable = ['name', 'type', 'price', 'stock'];   
 }

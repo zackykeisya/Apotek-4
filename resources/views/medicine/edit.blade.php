@@ -6,7 +6,7 @@
     <h1>Create</h1>
 </div> --}}
 
-<form action="{{ route('medicine.update.obat', $medicine['id'])}}" method="POST" class="card p-5">
+<form action="{{ route('data_obat.ubah.proses', $medicine['id'])}}" method="POST" class="card p-5">
     @csrf
     @method('PATCH')
     @if(Session::get('success'))

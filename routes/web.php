@@ -1,8 +1,12 @@
 <?php
 
+use App\Http\Controllers\KelolaAkunController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\MedicineController;
+use Illuminate\Routing\RouteGroup;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +18,23 @@ use App\Http\Controllers\MedicineController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+Route::middleware(['IsLogout'])->group(function() {
+    
 
 Route::get('/', function () {
-    return view('welcome');
-})->name('welcome');
+    return view('login');
+})->name('login');
+
+Route::post('/login', [KelolaAkunController::class, 'loginProses'])->name('login.proses');
+
+});
+
+
+Route::middleware(['IsLogin'])->group(function() {
+    Route::get('/logout', [KelolaAkunController::class, 'logout'])->name('logout');
+
+
+
 
 // Route::httpMethod('/path', [NamaController::class, 'namaFunc'])->name('identitas_route');
 // httpMethod 
@@ -27,12 +44,49 @@ Route::get('/', function () {
 // delete -> menghapus data
 Route::get('/landing-page', [LandingPageController::class, 'index'])->name('landing_page');
 
-// mengelola data obat
-Route::get('/data-obat', [MedicineController::class, 'index'])->name('data_obat');
+// Route::middleware(['IsAdmin'])->group(function)
 
-Route::prefix('/dashboard')->name('medicines.')->group(function(){
-    Route::get('/halaman-tambah-obat', [MedicineController::class, 'create'])->name('create');
-    Route::post('/create-obat', [MedicineController::class, 'store'])->name('store.obat');
-    Route::get('/halaman-ubah-obat/{id}', [MedicineController::class, 'edit'])->name('edit');
-    Route::patch('/update-obat/{id}', [MedicineController::class, 'update'])->name('update.obat');
+// mengelola data obat
+// Route::get('/data-obat', [MedicineController::class, 'index'])->name('data_obat');
+Route::middleware(['IsAdmin'])->group(function() {
+Route::prefix('/data_obat')->name('data_obat.')->group(function(){
+    Route::get('/data', [MedicineController::class, 'index'])->name('data');
+    Route::get('/tambah', [MedicineController::class, 'create'])->name('tambah');
+    Route::post('/tambah/proses', [MedicineController::class, 'store'])->name('tambah.proses');
+    Route::get('/ubah/{id}', [MedicineController::class, 'edit'])->name('ubah');
+    Route::patch('/ubah/{id}/proses', [MedicineController::class, 'update'])->name('ubah.proses');
+    Route::delete('/hapus{id}', [MedicineController::class, 'destroy'])->name('hapus');
+    Route::patch('/ubah/stok/{id}', [MedicineController::class, 'updateStock'])->name('ubah.stok');
 });
+
+Route::get('/admin/orders', [OrderController::class, 'indexAdmin'])->name('admin.orders');
+Route::get('/orders/export/excel', [OrderController::class, 'exportExcel'])->name('export.excel');
+
+// Route::get('/kelola-akun')->name('kelola_akun.')->group(function() {
+//     Route::get('/kelola', [])
+// });
+// });
+
+
+
+Route::prefix('/kelola_akun')->name('kelola_akun.')->group(function(){
+    Route::get('/akun',[KelolaAkunController::class, 'index'])->name('akun');
+    Route::get('/tambah', [KelolaAkunController::class, 'create'])->name('tambah');
+    Route::post('/tambah/proses', [KelolaAkunController::class, 'store'])->name('tambah.proses');
+    Route::get('/ubah/{id}', [KelolaAkunController::class, 'edit'])->name('ubah');
+    Route::patch('/ubah/{id}/proses', [KelolaAkunController::class, 'update'])->name('ubah.proses');
+    Route::delete('/hapus{id}', [KelolaAkunController::class, 'destroy'])->name('hapus');
+        });
+    });
+
+    Route::middleware('isKasir')->group(function(){
+        Route::prefix('/kasir')->name('kasir.')->group(function() {
+            Route::get('/order', [OrderController::class, 'index'])->name('order');
+            Route::get('/create', [OrderController::class, 'create'])->name('create');
+            Route::post('/create/proses', [OrderController::class, 'store'])->name('create.proses');
+            Route::get('/print/{id}', [OrderController::class, 'show'])->name('print');
+            Route::get('/download/{id}', [OrderController::class, 'downloadPDF'])->name('download');
+        });
+    });
+
+}); 

@@ -53,6 +53,14 @@ class MedicineController extends Controller
             'type' => 'required',
             'price' => 'required|numeric',
             'stock' => 'required|numeric'
+        ], [
+            'name.required' => 'Nama obat harus di isi!',
+            'name.max' => 'Nama obat maksimal 100 karakter',
+            'type.required' => 'Tipe obat harus di isi',
+            'price.required' => 'Harga obat harus di isi',
+            'price.numeric' => 'Harga obat harus di isi dengan angka',
+            'stock.required' => 'Stok obat harus di isi',
+            'stock.numeric' => 'Stok obat harus di isi dengan angka',
         ]);
 
         Medicine::create($request->all());
@@ -85,7 +93,7 @@ class MedicineController extends Controller
     {
         $request->validate([
             'name' => 'required|max:100',
-            'tipe' => 'required',
+            'type' => 'required',
             'price' => 'required|numeric'
         ]);
 
@@ -95,14 +103,30 @@ class MedicineController extends Controller
             'price' => $request->price
         ]);
 
-        return redirect()->back()->with('success', 'Berhasil Menambah Data Obat!');
+        return redirect()->route('data_obat.data')->with('success', 'Berhasil Menambah Data Obat!');
+    }
+
+    public function updateStock(Request $request, $id) {
+        if(isset($request->stock)== FALSE) {
+            $medicineBefore = Medicine::find($id);
+            return redirect()->back()->with([
+                'failed' => 'Stock boleh kosong!', 
+                'id' => $id, 
+                'stok' => $medicineBefore['stock']
+            ]);
+        }
+
+        Medicine::where('id', $id)->update(['stock' => $request->stock ]);
+        return redirect()->back()->with('success', 'Berhasil mengubah data stock!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Medicine $medicine)
+    public function destroy($id)
     {
         //
+        Medicine::where('id',$id)->delete();
+        return redirect()->back()->with('success', 'Data berhasil dihapus');
     }
 }
